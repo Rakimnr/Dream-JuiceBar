@@ -1,0 +1,16 @@
+# Build output
+out/
+bin/
+target/
+*.class
+
+# Runtime data (our persistence folder)
+data/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
