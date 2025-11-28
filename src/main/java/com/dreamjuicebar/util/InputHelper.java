@@ -1,10 +1,13 @@
 package com.dreamjuicebar.util;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 /**
- * Centralized input utility to enforce validation and avoid Scanner newline bugs.
- * This becomes the “single source of truth” for console input.
+ * Central input utility for validation + smooth console UX.
+ * Adds:
+ * - readLine() allowing empty input (useful for "Press Enter")
+ * - readMoney() using BigDecimal for proper billing
  */
 public class InputHelper {
     private final Scanner sc;
@@ -13,6 +16,13 @@ public class InputHelper {
         this.sc = sc;
     }
 
+    /** Reads a line (can be empty). */
+    public String readLine(String prompt) {
+        System.out.print(prompt);
+        return sc.nextLine();
+    }
+
+    /** Reads non-empty string. */
     public String readNonEmpty(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -54,5 +64,27 @@ public class InputHelper {
                 System.out.println("⚠ Invalid number. Try again.");
             }
         }
+    }
+
+    /** Reads monetary amount safely. Examples: 450 or 450.00 */
+    public BigDecimal readMoney(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String s = sc.nextLine().trim();
+            try {
+                BigDecimal v = new BigDecimal(s);
+                if (v.compareTo(BigDecimal.ZERO) <= 0) {
+                    System.out.println("⚠ Amount must be > 0");
+                    continue;
+                }
+                return v;
+            } catch (Exception e) {
+                System.out.println("⚠ Invalid amount. Example: 450 or 450.00");
+            }
+        }
+    }
+
+    public void pause() {
+        readLine("Press Enter to continue...");
     }
 }
